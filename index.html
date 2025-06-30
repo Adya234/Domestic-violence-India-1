@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discreet SOS Chatbot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f3f4f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    .chat-box {
+      border: 1px solid #ccc;
+      height: 250px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 8px;
+    }
+    .message {
+      margin: 5px 0;
+    }
+    .user {
+      text-align: right;
+    }
+    .bot {
+      text-align: left;
+    }
+    .bubble {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 12px;
+    }
+    .user .bubble {
+      background: #dbeafe;
+    }
+    .bot .bubble {
+      background: #e5e7eb;
+    }
+    .input-box {
+      display: flex;
+      gap: 10px;
+    }
+    input[type="text"] {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .sos {
+      color: red;
+      margin-top: 10px;
+      background: none;
+    }
+    .toggle {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 12px;
+      color: #3b82f6;
+      text-decoration: underline;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .discreet {
+      text-align: center;
+      color: #9ca3af;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button class="toggle" onclick="toggleMode()">Enter Discreet Mode</button>
+    <div id="discreetView" class="discreet" style="display: none;">
+      <p class="text-2xl">123+456</p>
+      <p class="text-sm">= 579</p>
+    </div>
+    <div id="chatView">
+      <h2>Support Chat</h2>
+      <div id="chatBox" class="chat-box"></div>
+      <div class="input-box">
+        <input type="text" id="inputMessage" placeholder="Type a message..." onkeydown="handleKey(event)">
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+    <button class="sos" onclick="triggerSOS()">🚨 Trigger SOS (Helpline 181)</button>
+  </div>
+
+  <script>
+    let isDiscreet = false;
+
+    function toggleMode() {
+      isDiscreet = !isDiscreet;
+      document.querySelector('.toggle').innerText = isDiscreet ? 'Exit Discreet Mode' : 'Enter Discreet Mode';
+      document.getElementById('discreetView').style.display = isDiscreet ? 'block' : 'none';
+      document.getElementById('chatView').style.display = isDiscreet ? 'none' : 'block';
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('inputMessage');
+      const message = input.value.trim();
+      if (!message) return;
+      appendMessage('user', message);
+      input.value = '';
+      setTimeout(() => {
+        appendMessage('bot', 'We hear you. Stay strong. Help is on the way if needed.');
+      }, 500);
+    }
+
+    function appendMessage(sender, text) {
+      const chatBox = document.getElementById('chatBox');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${sender}`;
+      messageDiv.innerHTML = `<span class="bubble">${text}</span>`;
+      chatBox.appendChild(messageDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function handleKey(e) {
+      if (e.key === 'Enter') sendMessage();
+    }
+
+    function triggerSOS() {
+      alert('SOS Triggered! Help is being alerted.');
+      window.location.href = 'tel:181';
+    }
+  </script>
+</body>
+</html>
